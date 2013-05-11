@@ -1,8 +1,9 @@
 SueMe::Application.routes.draw do
-
+  resources :users, only: [:create, :show]
   #post '/users' => 'users#create'
  
   match '/signup', to: 'users#create'
+  match '/user',   to: 'users#show'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
