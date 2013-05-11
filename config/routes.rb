@@ -1,4 +1,9 @@
 SueMe::Application.routes.draw do
+
+  #post '/users' => 'users#create'
+ 
+  match '/signup', to: 'users#create'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
