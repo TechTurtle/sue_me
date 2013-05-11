@@ -11,6 +11,7 @@ class UsersController < ApplicationController
     end
   end
 
-  def show
+  def show 
+    render json: User.new(first_name: "Greg", last_name: "JB", email: "gjean011@yahoo.com", city: "Miami", state: "Florida", password: "yahhooooo", password_confirmation: "yahhooooo")
   end
 end
