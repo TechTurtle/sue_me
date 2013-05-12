@@ -11,7 +11,29 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130511182335) do
+ActiveRecord::Schema.define(:version => 20130512180732) do
+
+  create_table "comments", :force => true do |t|
+    t.string   "text"
+    t.string   "user_id"
+    t.string   "integer"
+    t.string   "lawsuit_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "comments", ["user_id", "created_at"], :name => "index_comments_on_user_id_and_created_at"
+
+  create_table "lawsuits", :force => true do |t|
+    t.string   "title"
+    t.string   "content"
+    t.integer  "user_id"
+    t.string   "suit_type"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "lawsuits", ["user_id", "created_at"], :name => "index_lawsuits_on_user_id_and_created_at"
 
   create_table "users", :force => true do |t|
     t.string   "first_name"
