@@ -1,5 +1,8 @@
 class User < ActiveRecord::Base
   has_many :lawsuits 
+  has_many :comments
+  has_many :votes
+
   attr_accessible :city, :email, :first_name, :last_name, :state, :password, 
                   :password_confirmation
   has_secure_password

@@ -1,11 +1,11 @@
 class LawsuitsController < ApplicationController
   
   def create
-    user = User.find_by_remember_token(params[:session][:remember_token])
+    user = User.find_by_remember_token(params[:remember_token])
     if user
-      sue = Lawsuit.new(params[:session][:lawsuit])
+      sue = Lawsuit.new(params[:lawsuit])
       if sue.save
-        @response = { title: sue.title, content: sue.content, type: sue.type, user_id: sue.user_id, success: "true", id: sue.id}
+        @response = { lawsuit: sue, success: "true" }
         render json: @response
       else
         @response = { success: "false" }
@@ -26,8 +26,18 @@ class LawsuitsController < ApplicationController
   def show
     lawsuit = Lawsuit.find_by_id(params[:id])
     if lawsuit
-      @response = { lawsuit: lawsuit }
-      render json: @response
+      has_lawsuit = params[:has_lawsuit]
+      plus = Vote.vote_count_type(params[:vote][:lawsuit_id], true)
+      minus = Vote.vote_count_type(params[:vote][:lawsuit_id], false)
+      if has_lawsuit
+        commments = lawsuit.comments.paginate(page: params[:page])
+        @response = { comments: comments, favor: plus, against: minus, success: "true" }  
+        render json: @response
+      else
+        commments = lawsuit.comments.paginate(page: params[:page])
+        @response = { lawsuit: lawsuit, comments: comments, favor: plus, against: minus, success: "true" }  
+        render json: @response 
+      end
     else
       @response = { success: "false" }
       render json: @response
@@ -35,12 +45,12 @@ class LawsuitsController < ApplicationController
   end
 
   def update
-    user = User.find_by_remember_token(params[:session][:remember_token])
-    sue = Lawsuit.find_by_id(params[:session][:lawsuit][:id]) 
+    user = User.find_by_remember_token(params[:remember_token])
+    sue = Lawsuit.find_by_id(params[:lawsuit][:id]) 
     if sue && user
       if sue.user == user
-        if sue.update_attributes(content: params[:session][:lawsuit][:content])
-          @response = { title: sue.title, content: sue.content, type: sue.type, user_id: sue.user_id, success: "true", id: sue.id}
+        if sue.update_attributes(content: params[:lawsuit][:content])
+          @response = { lawsuit: sue, success: "true" }
           render json: @response  
         else
           @response = { success: "false" }
@@ -57,17 +67,18 @@ class LawsuitsController < ApplicationController
   end
 
   def destroy
-    user = User.find_by_remember_token(params[:session][:remember_token])
-    sue = Lawsuit.find_by_id(params[:session][:lawsuit_id]) 
-    if sue && user
-      if sue.user == user
-        sue.destroy
-        @response = { success: "true" }
-        render json: @response
-      else
-        @response = { success: "false" }
-        render json: @response
+    user = User.find_by_remember_token(params[:remember_token])
+    sue = Lawsuit.find_by_id(params[:id]) 
+    if sue && user && sue.user == user
+      comments = sue.comments
+
+      comments.each do |c|
+        c.destroy
       end
+
+      sue.destroy
+      @response = { success: "true" }
+      render json: @response
     else
       @response = { success: "false" }
       render json: @response

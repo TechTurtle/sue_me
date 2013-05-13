@@ -1,23 +1,32 @@
 SueMe::Application.routes.draw do
-  get "comments/new"
+  get "votes/new"
 
-  get "lawsuits/new"
+  #get "comments/new"
+
+  #get "lawsuits/new"
 
   resources :users, only: [:create, :show]
   resources :sessions, only: [:create, :destroy]
   resources :lawsuits, only: [:create, :index, :show, :update, :destroy]
+  resources :comments, only: [:create, :index, :show, :update, :destroy]
   #post '/users' => 'users#create'
  
   match '/signup',  to: 'users#create', via: :post
   match '/user',    to: 'users#show', via: :post
-  match '/signin',  to: 'sessions#create',  via: :post
+  match '/signin',  to: 'sessions#create', via: :post
   match '/signout', to: 'sessions#destroy', via: :delete
 
-  match '/newlawsuit',    to: 'lawsuits#create', via: :post
-  match '/viewlawsuits',  to: 'lawsuits#index', via: :get
-  match '/viewlawsuit',   to: 'lawsuits#show', via: :get
-  match '/editlawsuit',   to: 'lawsuits#update', via: :put
-  match '/deletelawsuit', to: 'lawsuits#destroy', via: :delete
+  match '/lawsuits/new',   to: 'lawsuits#create', via: :post
+  match '/lawsuits',       to: 'lawsuits#index', via: :get
+  match '/lawsuit',        to: 'lawsuits#show', via: :get
+  match '/lawsuit/edit',   to: 'lawsuits#update', via: :put
+  match '/lawsuit/delete', to: 'lawsuits#destroy', via: :delete
+
+  match '/comments/new',   to: 'comments#create', via: :post
+  match '/comments',       to: 'comments#index', via: :get
+  match '/comment',        to: 'comments#show', via: :get
+  match '/comments/edit',  to: 'comments#create', via: :put
+  match '/comment/delete', to: 'comments#destroy', via: :delete
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
