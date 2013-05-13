@@ -1,5 +1,5 @@
 SueMe::Application.routes.draw do
-  get "votes/new"
+  #get "votes/new"
 
   #get "comments/new"
 
@@ -9,6 +9,7 @@ SueMe::Application.routes.draw do
   resources :sessions, only: [:create, :destroy]
   resources :lawsuits, only: [:create, :index, :show, :update, :destroy]
   resources :comments, only: [:create, :index, :show, :update, :destroy]
+  resources :votes, only: [:create, :index, :show, :update, :destroy]
   #post '/users' => 'users#create'
  
   match '/signup',  to: 'users#create', via: :post
@@ -25,8 +26,14 @@ SueMe::Application.routes.draw do
   match '/comments/new',   to: 'comments#create', via: :post
   match '/comments',       to: 'comments#index', via: :get
   match '/comment',        to: 'comments#show', via: :get
-  match '/comments/edit',  to: 'comments#create', via: :put
+  match '/comment/edit',   to: 'comments#create', via: :put
   match '/comment/delete', to: 'comments#destroy', via: :delete
+
+  match '/votes/new',   to: 'comments#create', via: :post
+  match '/votes',       to: 'comments#index', via: :get
+  match '/vote',        to: 'comments#show', via: :get
+  match '/vote/edit',   to: 'comments#create', via: :put
+  match '/vote/delete', to: 'comments#destroy', via: :delete
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

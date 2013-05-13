@@ -27,8 +27,8 @@ class LawsuitsController < ApplicationController
     lawsuit = Lawsuit.find_by_id(params[:id])
     if lawsuit
       has_lawsuit = params[:has_lawsuit]
-      plus = Vote.vote_count_type(params[:vote][:lawsuit_id], true)
-      minus = Vote.vote_count_type(params[:vote][:lawsuit_id], false)
+      plus = Vote.vote_count_type(params[:lawsuit_id], true)
+      minus = Vote.vote_count_type(params[:lawsuit_id], false)
       if has_lawsuit
         commments = lawsuit.comments.paginate(page: params[:page])
         @response = { comments: comments, favor: plus, against: minus, success: "true" }  
